@@ -20,6 +20,13 @@ class DBSetupTest < ActiveSupport::TestCase
     assert_equal TenantDatabases::DESIRED_DB_COUNT, configs_count
   end
 
+  test '4 method replacement fixes behavior' do
+    require 'rails_application_configuration'
+    assert_no_difference('configs_count') do
+      silence_stream($stdout) { Rake::Task['db:version'].invoke }
+    end
+  end
+
   private
 
   def configs_count
